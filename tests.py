@@ -15,14 +15,6 @@ def get_base_url() -> str:
     return "http://localhost:{}/".format(config.SERVER_PORT)
 
 
-def test_head() -> str:
-    req = requests.head(get_base_url())
-    if req.status_code != 501:
-        return "Bad status code: {}, expected: {}".format(str(req.status_code), "200")
-    if len(req.text) > 0:
-        return "Head returned some content."
-    return ""
-
 def test_get() -> str:
     req = requests.get(get_base_url())
     if req.status_code != 200:

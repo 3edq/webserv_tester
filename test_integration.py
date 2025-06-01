@@ -106,12 +106,6 @@ def test_multiple_ports():
     request = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n"
     send_request(request)
 
-    # 別ポートのテストはサーバ設定に応じて有効化
-    # sock2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # sock2.connect((HOST, 8090))
-    # sock2.sendall(request.encode('utf-8'))
-    # print(sock2.recv(4096).decode('utf-8'))
-    # sock2.close()
 
 def test_upload_and_download():
     print_title("Upload file (requests)")
@@ -122,9 +116,6 @@ def test_upload_and_download():
     print_title("Download file (requests)")
     res = requests.get(f"http://localhost:{PORT}/upload/test.txt")
     print(res.status_code, res.text)
-
-# def test_stress():
-#     pass  # Optional implementation
 
 # --- 実行 ---
 if __name__ == "__main__":
@@ -168,8 +159,5 @@ if __name__ == "__main__":
 
     print_title("Upload and download")
     test_upload_and_download()
-
-    # print_title("Stress test")
-    # test_stress()
 
     stop_server()

@@ -6,9 +6,6 @@ from send_request import send_request
 import config
 
 
-# test rfc7230 section 5.4 Host
-
-
 def test_post_not_allowed() -> str:
     request_header = "POST / HTTP/1.1\r\nHost: xx\r\n\r\n"
     http_response = send_request(request_header)

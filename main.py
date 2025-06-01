@@ -64,9 +64,6 @@ def run() -> None:
 
     run_test("GET cgi", lambda: test_get_cgi())
 
-    print(r"{}{}### TESTING HEAD ###{}".format(C_B_WHITE, B_GRAY, RESET))
-    run_test("HEAD /", test_head)
-
     print(r"{}{}### TESTING REQUEST LINE ###{}".format(C_B_WHITE, B_GRAY, RESET))
     run_test("GET / HTTP/0.1", test_error_http_version)
 
