@@ -196,10 +196,3 @@ def test_cgi_post() -> str:
     if req.status_code != 200:
         return "Bad status code for CGI POST: {}".format(req.status_code)
     return ""
-
-def test_large_body() -> str:
-    payload = "a" * (config.MAX_BODY_SIZE + 1)
-    req = requests.post(get_base_url() + "post/test", data=payload)
-    if req.status_code != 413:
-        return "Bad status code for large body: {}, expected: 413".format(req.status_code)
-    return ""

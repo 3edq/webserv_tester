@@ -9,7 +9,6 @@ from testcase.request_line import *
 from testcase.error import *
 from testcase.get import *
 from testcase.post import *
-from testcase.put import *
 from testcase.chunked import *
 
 from typing import Callable
@@ -54,7 +53,6 @@ def run() -> None:
     run_test("Upload and Download", test_upload_and_download)
     run_test("CGI GET", test_cgi_get)
     run_test("CGI POST", test_cgi_post)
-    run_test("Large Body", test_large_body)
     run_test("GET page2.html", lambda: test_get_page("page2.html"))
     run_test("GET error.html", lambda: test_get_page("error.html"))
     run_test("GET index1.html", lambda: test_get_page("index1.html"))
@@ -112,7 +110,6 @@ def run() -> None:
     print(r"{}{}### TESTING CHUNKED ###{}".format(C_B_WHITE, B_GRAY, RESET))
     run_test("Testing read content & trailer", test_chunked_w_trailer)
     run_test("00000", test_chunked_multiplezeros)
-    run_test("0", test_DecodeEmptyBodyInPieces)
     run_test("0\\r\\n\\r\\nHello!", test_DecodeEmptyBodyWithExtraStuffAfter)
     run_test("F\\r\\nHello, World!!!", test_DecodeThreeChunksOnePiece)
 

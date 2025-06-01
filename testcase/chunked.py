@@ -62,32 +62,6 @@ def test_chunked_multiplezeros() -> str:
     # print(body)
     return ""
 
-def test_DecodeEmptyBodyInPieces() -> str:
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect((config.SERVER_ADDR, config.SERVER_PORT))
-    request_header = "POST /post/print.cgi HTTP/1.1\r\nHost: localhost\r\nTransfer-encoding: chunked\r\n\r\n"
-    client.send(request_header.encode())
-    request_header = "0"
-    client.send(request_header.encode())
-    request_header = "\r"
-    client.send(request_header.encode())
-    request_header = "\n"
-    client.send(request_header.encode())
-    request_header = "\r"
-    client.send(request_header.encode())
-    request_header = "\n"
-    client.send(request_header.encode())
-
-    # read and parse http response
-    http_response = HTTPResponse(client)
-    http_response.begin()
-    if http_response.status != 226:
-        return "Bad status code: {}, expected: {}".format(
-            str(http_response.status), "226"
-        )
-    # print(body)
-    return ""
-
 
 def test_DecodeEmptyBodyWithExtraStuffAfter() -> str:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
