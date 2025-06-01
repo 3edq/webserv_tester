@@ -85,8 +85,8 @@ def test_redirect():
     request = "GET /redirect HTTP/1.1\r\nHost: localhost\r\n\r\n"
     send_request(request)
 
-def test_directory_listing():
-    request = "GET /directory/ HTTP/1.1\r\nHost: localhost\r\n\r\n"
+def test_autoindex():
+    request = "GET /index/ HTTP/1.1\r\nHost: localhost\r\n\r\n"
     send_request(request)
 
 def test_error_handling():
@@ -138,8 +138,8 @@ if __name__ == "__main__":
     print_title("Redirect")
     test_redirect()
 
-    print_title("Directory listing")
-    test_directory_listing()
+    print_title("Autoindex")
+    test_autoindex()
 
     print_title("Error handling")
     test_error_handling()
