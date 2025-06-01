@@ -4,8 +4,6 @@ sys.path.append("../")
 from send_request import send_request
 import config
 
-# test rfc7230 section 5.4 Host
-
 
 def test_missing_host() -> str:
     request_header = "GET / HTTP/1.1\r\n\r\n"

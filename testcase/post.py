@@ -75,5 +75,4 @@ def test_cgi_headers() -> str:
         or body.find("Hello from body!") == -1
     ):
         return "Missing headers from request"
-    # print(body)
     return ""

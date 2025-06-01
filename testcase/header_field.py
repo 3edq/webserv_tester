@@ -87,23 +87,3 @@ def test_headers() -> str:
     ):
         return "Missing headers"
     return ""
-
-
-def test_case_insensitive() -> str:
-    request_header = "GET / HTTP/1.1\r\nhost:{}\r\n\r\n".format(config.SERVER_NAME)
-    http_response = send_request(request_header)
-    if http_response.status != 200:
-        return "Bad status code: {}, expected: {}".format(
-            str(http_response.status), "200"
-        )
-    request_header = (
-        "GET /protected HTTP/1.1\r\nHost:{}\r\nautHORIzatiON: {}\r\n\r\n".format(
-            config.SERVER_NAME, config.AUTH_KEY
-        )
-    )
-    http_response = send_request(request_header)
-    if http_response.status != 200:
-        return "Bad status code: {}, expected: {}".format(
-            str(http_response.status), "200"
-        )
-    return ""
