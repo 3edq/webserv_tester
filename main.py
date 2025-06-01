@@ -105,7 +105,7 @@ def run() -> None:
     run_test("/", test_post_not_allowed)
     run_test("/post/tmp/a.html * 2", test_post)
     run_test("POST /post/test too big payload", test_too_big_request)
-    run_test("POST /test.cgi ", test_cgi_headers)
+    run_test("POST /cgi.sh ", test_cgi_headers)
 
     print(r"{}{}### TESTING CHUNKED ###{}".format(C_B_WHITE, B_GRAY, RESET))
     run_test("Testing read content & trailer", test_chunked_w_trailer)

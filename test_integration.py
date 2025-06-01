@@ -14,22 +14,12 @@ RED = "\033[91m"
 CYAN = "\033[96m"
 RESET = "\033[0m"
 
-# --- サーバ起動・停止 ---
-def start_server():
-    print(f"{CYAN}Starting server...{RESET}")
-    subprocess.Popen(["python3", "path/to/your/server.py"])
-    time.sleep(2)
-
-def stop_server():
-    print(f"{CYAN}Stopping server...{RESET}")
-    subprocess.call(["pkill", "-f", "path/to/your/server.py"])
-
 # --- ヘルパー ---
-def send_request(request: str):
+def send_request(request: str, port: int = PORT):
     response = b""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((HOST, PORT))
+        sock.connect((HOST, port))
         sock.sendall(request.encode('utf-8'))
         while True:
             chunk = sock.recv(4096)
@@ -43,6 +33,7 @@ def send_request(request: str):
 
 def print_title(title: str):
     print(f"\n{CYAN}=== {title} ==={RESET}")
+
 
 # --- 各テスト ---
 def test_get_request():
@@ -80,12 +71,12 @@ def test_chunked_request():
     send_request(request)
 
 def test_cgi_get():
-    request = "GET /cgi-bin/test.cgi HTTP/1.1\r\nHost: localhost\r\n\r\n"
+    request = "GET /cgi/cgi.sh HTTP/1.1\r\nHost: localhost\r\n\r\n"
     send_request(request)
 
 def test_cgi_post():
     request = (
-        "POST /cgi-bin/test.cgi HTTP/1.1\r\nHost: localhost\r\n"
+        "POST /cgi/say_hello.py HTTP/1.1\r\nHost: localhost\r\n"
         "Content-Length: 9\r\n\r\nkey=value"
     )
     send_request(request)
@@ -103,8 +94,8 @@ def test_error_handling():
     send_request(request)
 
 def test_multiple_ports():
-    request = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n"
-    send_request(request)
+    request = "GET / HTTP/1.1\r\nHost: default_server\r\n\r\n"
+    send_request(request, port=8081)
 
 
 def test_upload_and_download():
@@ -119,7 +110,6 @@ def test_upload_and_download():
 
 # --- 実行 ---
 if __name__ == "__main__":
-    start_server()
 
     print_title("GET request")
     test_get_request()
@@ -159,5 +149,3 @@ if __name__ == "__main__":
 
     print_title("Upload and download")
     test_upload_and_download()
-
-    stop_server()

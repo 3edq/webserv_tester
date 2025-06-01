@@ -186,13 +186,13 @@ def test_upload_and_download() -> str:
     return ""
 
 def test_cgi_get() -> str:
-    req = requests.get(get_base_url() + "cgi-bin/test.cgi")
+    req = requests.get(get_base_url() + "cgi/cgi.sh")
     if req.status_code != 200:
         return "Bad status code for CGI GET: {}".format(req.status_code)
     return ""
 
 def test_cgi_post() -> str:
-    req = requests.post(get_base_url() + "cgi-bin/test.cgi", data={'key': 'value'})
+    req = requests.post(get_base_url() + "cgi/say_hello.py", data={'key': 'value'})
     if req.status_code != 200:
         return "Bad status code for CGI POST: {}".format(req.status_code)
     return ""
