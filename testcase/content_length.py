@@ -81,3 +81,13 @@ def test_big_post() -> str:
             str(http_response.status), "2XX"
         )
     return ""
+
+
+def test_content_length_limit() -> str:
+    request_header = "POST /post/test HTTP/1.1\r\nHost: {}\r\nContent-Length: {}\r\n\r\n{}".format(
+        config.SERVER_NAME, config.MAX_BODY_SIZE + 1, "a" * (config.MAX_BODY_SIZE + 1)
+    )
+    http_response = send_request(request_header)
+    if http_response.status != 413:
+        return "Bad status code for content length limit: {}, expected: 413".format(http_response.status)
+    return ""

@@ -50,6 +50,11 @@ def run() -> None:
     """
     print(r"{}{}### Normal Tests ###{}".format(C_B_WHITE, B_GRAY, RESET))
     run_test("GET /", test_get)
+    run_test("Unknown Method", test_unknown_method)
+    run_test("Upload and Download", test_upload_and_download)
+    run_test("CGI GET", test_cgi_get)
+    run_test("CGI POST", test_cgi_post)
+    run_test("Large Body", test_large_body)
     run_test("GET page2.html", lambda: test_get_page("page2.html"))
     run_test("GET error.html", lambda: test_get_page("error.html"))
     run_test("GET index1.html", lambda: test_get_page("index1.html"))

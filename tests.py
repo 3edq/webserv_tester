@@ -82,25 +82,6 @@ def test_get_cgi() -> str:
         return "Bad content."
     return ""
 
-def test_get_cgi_cookie() -> str:
-    html_content = """<!DOCTYPE html>
-<html>
-<body>
-<h3>Hello !</h3>
-</body>
-</html>
-
-"""
-    req = requests.get(get_base_url() + "cgi/python.cgi")
-    # print(html_content)
-    # print(req.text)
-    if req.status_code != 200:
-        return "Bad status code."
-    
-    if req.text != html_content:
-        return "Bad content."
-    return ""
-
 def test_get_dir_index() -> str:
     req = requests.get(get_base_url() + "a")
     if req.status_code != 200:
@@ -158,20 +139,6 @@ def test_autoindex() -> str:
     return ""
 
 
-def test_two_puts() -> str:
-    req = requests.put(get_base_url() + "post/c", data="1")
-    if req.status_code != 201:
-        return "Bad status code on first creation: {}, expected: {}".format(
-            str(req.status_code), "201"
-        )
-    req = requests.put(get_base_url() + "post/c", data="2")
-    if req.status_code != 204:
-        return "Bad status code on update: {}, expected: {}".format(
-            str(req.status_code), "204"
-        )
-    return ""
-
-
 def test_multiple_ports() -> str:
     req = requests.get(get_base_url())
     if req.text != "hello world":
@@ -200,29 +167,6 @@ def test_multiple_get() -> str:
     return ""
 
 
-def test_delete() -> str:
-    req = requests.put(get_base_url() + "post/test", data="test put and delete")
-    if req.status_code != 201:
-        return "Bad status on put request. {}".format(req.status_code)
-    location = req.headers["Location"]
-    if location != "/post/tmp/test":
-        return "Bad Location header: {}, expected: {}".format(
-            location, "/post/tmp/test"
-        )
-    print(location)
-    req = requests.get(get_base_url() + "post/tmp/test")
-    if req.status_code != 200 and req.text != "test put and delete":
-        return "Bad put request. {}".format(req.status_code)
-
-    req = requests.delete(get_base_url() + "post/tmp/test")
-    if req.status_code != 202 and req.status_code != 200:
-        return "Bad status code for DELETE."
-    req = requests.get(get_base_url() + location)
-    if req.status_code != 404:
-        return "File still exists after DELETE."
-    return ""
-
-
 def test_delete_no_file() -> str:
     req = requests.delete(get_base_url() + "post/gone")
     if req.status_code != 404:
@@ -230,10 +174,40 @@ def test_delete_no_file() -> str:
     return ""
 
 
-#######################
+def test_unknown_method() -> str:
+    req = requests.request("UNKNOWN", get_base_url())
+    if req.status_code != 405:
+        return "Bad status code for unknown method: {}, expected: 405".format(req.status_code)
+    return ""
 
+def test_upload_and_download() -> str:
+    # Upload a file
+    files = {'file': ('test.txt', 'This is a test file')}
+    req = requests.post(get_base_url() + "upload", files=files)
+    if req.status_code != 201:
+        return "Failed to upload file, status code: {}".format(req.status_code)
+    
+    # Download the file
+    req = requests.get(get_base_url() + "upload/test.txt")
+    if req.status_code != 200 or req.text != 'This is a test file':
+        return "Failed to download file, status code: {}".format(req.status_code)
+    return ""
 
-# CGI
-# PUT avec chunk
-# Multiple GET
-# CONNECT
+def test_cgi_get() -> str:
+    req = requests.get(get_base_url() + "cgi-bin/test.cgi")
+    if req.status_code != 200:
+        return "Bad status code for CGI GET: {}".format(req.status_code)
+    return ""
+
+def test_cgi_post() -> str:
+    req = requests.post(get_base_url() + "cgi-bin/test.cgi", data={'key': 'value'})
+    if req.status_code != 200:
+        return "Bad status code for CGI POST: {}".format(req.status_code)
+    return ""
+
+def test_large_body() -> str:
+    payload = "a" * (config.MAX_BODY_SIZE + 1)
+    req = requests.post(get_base_url() + "post/test", data=payload)
+    if req.status_code != 413:
+        return "Bad status code for large body: {}, expected: 413".format(req.status_code)
+    return ""

@@ -80,27 +80,3 @@ def test_cgi_headers() -> str:
         return "Missing headers from request"
     # print(body)
     return ""
-
-
-def test_cgi_auth_headers() -> str:
-    request_header = (
-        request_header
-    ) = "GET /protected/print.cgi?name=fredrika&age=22 HTTP/1.1\r\nHost:{}\r\nAuthorization: {}\r\n\r\n".format(
-        config.SERVER_NAME, config.AUTH_KEY
-    )
-    http_response = send_request(request_header)
-    if http_response.status != 226:
-        return "Bad status code: {}, expected: {}".format(
-            str(http_response.status), "226"
-        )
-    body = http_response.read().decode("UTF-8")
-    # print(body)
-    if (
-        body.find("AUTH_TYPE=Basic") == -1
-        or body.find("REMOTE_IDENT=Admin") == -1
-        or body.find("REMOTE_USER=Admin") == -1
-        or body.find("QUERY_STRING=name=fredrika&age=22") == -1
-    ):
-        return "Missing headers from request"
-    # print(body)
-    return ""

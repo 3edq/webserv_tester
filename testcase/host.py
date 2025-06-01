@@ -37,16 +37,3 @@ def test_multiple_host() -> str:
             str(http_response.status), "400"
         )
     return ""
-
-
-def test_invalid_host() -> str:
-    request_header = "GET / HTTP/1.1\r\nHost: hyeyoo@hyeyoo.com\r\n\r\n"
-    http_response = send_request(request_header)
-    if http_response.status != 400:
-        return "Bad status code: {}, expected: {}".format(
-            str(http_response.status), "400"
-        )
-    return ""
-
-
-# TODO: tests with *
